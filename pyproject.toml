@@ -1,0 +1,11 @@
+[project]
+name = "evolving-mind"
+version = "0.0.1"
+description = "Self-steering small-model agent with a persistent protoself"
+requires-python = ">=3.12"
+dependencies = [
+    "mlx-lm==0.31.3",
+]
+
+[tool.uv]
+package = false
