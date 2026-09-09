@@ -17,3 +17,16 @@ just m1
 ```
 
 mlx-lm is pinned at 0.31.3.
+
+## M2
+
+Linear transition head on frozen Qwen3-1.7B. Two-pass train on
+`open-r1/Mixture-of-Thoughts` math. Then K latent steps before decode.
+
+```
+just m2-train
+just m2-gen --k 10
+```
+
+Paper-scale flags: `just m2-train --n 10000 --max-len 8192 --epochs 5`.
+The default is a session subset (256 traces, 2048 ctx, 1 epoch).

@@ -1,21 +1,27 @@
-# Plan: M1 repo + embedding survival ([HUB-244](https://linear.app/hublar/issue/HUB-244))
+# Plan: M2 GLR transition head ([HUB-245](https://linear.app/hublar/issue/HUB-245))
 
-Proceed. Execute the [HUB-243](https://linear.app/hublar/issue/HUB-243) recommendations.
+Proceed. Infuse the head. [HUB-244](https://linear.app/hublar/issue/HUB-244) proved
+the frame accepts embeddings. This unit trains `g_ϕ` on real CoT displacements.
+
+Paper: [arXiv:2606.02248](https://arxiv.org/abs/2606.02248) §3, Appendix A.
 
 ## In scope
-- Create private `cogignition/evolving-mind` at `~/src/evolving-mind`
-- Pin `mlx-lm==0.31.3` (uv lockfile)
-- `just m1` runs `scripts/m1_embed_survival.py` against `mlx-community/Qwen3-1.7B-bf16`
-- Record pass/fail on this issue
+- Linear head `d→d` on frozen `mlx-community/Qwen3-1.7B-bf16`
+- Two-pass train: discrete CoT, replace think-span embeddings, `L_CE + λ L_Δ`
+- `L_Δ`: discounted MSE, γ=0.999, no CE on latent tokens
+- Data: `open-r1/Mixture-of-Thoughts` math, real traces (session subset)
+- K-step latent generate via `model.model(..., input_embeddings=)`, then decode
+- Head checkpoint + in-place `load_weights`
+- `just m2-train` / `just m2-gen`
 
 ## Out of scope
-- Transition head / two-pass train (M2)
-- Interoception, regulator, harness, memory (M3–M5)
-- SysOp tree (`press/` `web/` `cdn/` `services/`)
-- `lms load` / touching Hermes's ornith slot
+- Paper-scale 10k × 8k × 5 epoch run (flags exist; not the gate)
+- GSM8K / MATH500 eval
+- M3–M5 (interoception, regulator, harness, memory)
+- SysOp tree; `lms load`
 
 ## Verify
-- `gh repo view cogignition/evolving-mind` exists
-- `uv lock` pins mlx-lm 0.31.3
-- `just m1` prints `mean abs hidden delta` under `1e-5`, `finite: True`, and a decoded token
-- Linear comment with the numbers
+- Trainable params ~4M (head only)
+- `just m2-train` : `L_Δ` finite and lower at last step than first
+- `just m2-gen --k 10` emits text after the latent prefix
+- Checkpoint reloads with `load_weights`
