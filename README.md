@@ -30,3 +30,15 @@ just m2-gen --k 10
 
 Paper-scale flags: `just m2-train --n 10000 --max-len 8192 --epochs 5`.
 The default is a session subset (256 traces, 2048 ctx, 1 epoch).
+
+## M3
+
+Brainstem. Five-channel interoception from the frozen forward (error,
+confidence, load, surprise, energy), concatenated into the head.
+A regulator shrinks the stride when error is high.
+
+```
+just m3-train
+just m3-verify
+just m3-gen --k 10
+```

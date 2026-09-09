@@ -14,3 +14,13 @@ m2-train *args:
 # M2: K-step latent generate with the trained head
 m2-gen *args:
     uv run python scripts/m2_generate.py {{args}}
+
+# M3: brainstem head (hidden ⊕ interoception)
+m3-train *args:
+    uv run python scripts/m3_train.py {{args}}
+
+m3-gen *args:
+    uv run python scripts/m3_generate.py {{args}}
+
+m3-verify:
+    uv run python scripts/m3_verify.py
